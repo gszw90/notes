@@ -1,5 +1,38 @@
 # mongodb
 
+## 单例
+
+### 准备docker-compose.yaml
+```yaml
+version: '3.8'
+
+services:
+  mongo6:
+    image: mongodb/mongodb-community-server:6.0.15-ubi8
+    container_name: mongo6
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGODB_INITDB_ROOT_USERNAME=zeng
+      - MONGODB_INITDB_ROOT_PASSWORD=zeng
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - mongo_network
+
+networks:
+  mongo_network:
+    driver: bridge
+```
+### 启动容器
+```bash
+docker-compose up -d
+```
+
+
+## 后面的失败了
+
 ## 准备工作
 ### 生成秘钥
 ```bash
@@ -37,10 +70,10 @@ services:
       - mongo-network
 
   mongodb6-2:
-    #    image: "mongo:6.0.15"
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "mongo:6.0.15"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     container_name: mongodb6-2
     depends_on:
       - mongodb6-1
@@ -55,10 +88,10 @@ services:
       - mongo-network
 
   mongodb6-3:
-    #    image: "mongo:6.0.15"
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "mongo:6.0.15"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     container_name: mongodb6-3
     depends_on:
       - mongodb6-1
