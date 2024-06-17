@@ -1,0 +1,21 @@
+# 编译
+FROM golang:1.21.11-alpine3.20 as builder
+ENV GOPROXY https://goproxy.cn
+# 将源码拷贝到容器内
+COPY ./src /app
+# 打包文件
+RUN cd /app && go build -o app .
+
+
+# 部署
+FROM golang:1.21.11-alpine3.20
+LABEL maintainer="zeng<zeng@163.com>"
+# 环境变量设置
+ENV APP_PORT 8089
+# 设置工作目录
+WORKDIR /app
+COPY --from=builder /app/app /app/app
+# 暴露端口
+EXPOSE 8089
+# 运行程序
+CMD "./app"
